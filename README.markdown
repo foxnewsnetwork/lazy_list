@@ -6,6 +6,13 @@ One of the most badass things about Ruby2.0 is the Enumerator::Lazy,
 but using that guy on a regular boring Array is kind of a waste as it
 doesn't make it lazy enough. Thus lazy_list for ruby.
 
+# IMPORTANT!!
+=
+Requires Ruby2.0 to work!
+
+Actually, that's not necessarily true. It requires Enurmerator::Lazy to work
+
+
 Examples
 =
 1. Generic FizzBuzz (where divisble by 3 -> fizz, divisble by 5 -> buzz, divisible by 15 -> fizzbuzz) example
@@ -13,7 +20,7 @@ Examples
   from_1 = LazyList::Stream.cycle(1).recur { |v| v + 1 } # [1, 2, 3, 4, 5...]
   fizzes = from_1.lazy.map { |v| (v%3).zero? "fizz" : nil }
   buzzes = from_1.lazy.map { |v| (v%5).zero? "buzz" : nil }
-  solution = fizzes.zip(buzzes).zip(from_1).map { |v| [v.last, "#{v[0]}#{v[1]}"] }.take(100).to_a
+  solution = from_1.lazy.zip(fizzes.zip buzzes).map { |v| [v.first, "#{v.last.first}#{v.last.last}"] }.take(100).to_a
 ```
 
 2. More examples coming up!

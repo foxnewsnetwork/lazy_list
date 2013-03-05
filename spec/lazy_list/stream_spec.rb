@@ -9,6 +9,27 @@ describe LazyList::Stream do
       describe "#recur" do
         let(:infinite) { stream.recur { |v| v + 1 }.lazy }
 
+        context "fizzbuzz" do
+          let(:fizzes) { infinite.map { |v| (v%3).zero? ? "fizz" : "" } }
+          let(:buzzes) { infinite.map { |v| (v%5).zero? ? "buzz" : "" } }
+          let(:solution) { infinite.zip(fizzes.zip buzzes).map { |v| [v.first, "#{v.last.first}#{v.last.last}"] }.take(100).to_a }
+
+          it "should give me the solution as I expected" do
+            Hash[solution].each do |number, word|
+              if (number % 3).zero? && (number % 5).zero?
+                word.should eq "fizzbuzz"
+              elsif (number % 3).zero?
+                word.should eq "fizz"
+              elsif (number % 5).zero?
+                word.should eq "buzz"
+              else
+                word.should eq ""
+              end
+            end
+            solution.count.should eq 100
+          end
+        end
+
         context "enumerable" do
 
           describe "#take" do
@@ -23,7 +44,7 @@ describe LazyList::Stream do
             let(:odds) { infinite.reject { |v| (v%2).zero? }.take(100).to_a }
             it "should only have the odd numbers" do
               odds.count.should eq 100
-              odds.each { |o| (0%2).should eq 0 }
+              odds.each { |o| (o%2).should eq 1 }
             end
           end
 
